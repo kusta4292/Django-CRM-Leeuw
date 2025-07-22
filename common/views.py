@@ -17,6 +17,7 @@ from django.http.response import JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
 from django.utils.encoding import force_str
+from django.utils.crypto import get_random_string
 from django.utils.http import urlsafe_base64_decode
 from django.utils.translation import gettext as _
 from django.views import View
@@ -899,7 +900,7 @@ class GoogleLoginView(APIView):
             user.email = data['email']
             user.profile_pic = data['picture']
             # provider random default password
-            user.password = make_password(BaseUserManager().make_random_password())
+            user.password = make_password(get_random_string(12))
             user.email = data['email']
             user.save()
         token = RefreshToken.for_user(user)  # generate token without username & password
